@@ -2,5 +2,5 @@
     "name": "SidebarModule",
     "description": "A better sidebar",
     "requires": ["SettingsManager"],
-	"version": 1.2
+	"version": 1.3
 }

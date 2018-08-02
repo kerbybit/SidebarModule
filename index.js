@@ -155,7 +155,7 @@ register("tick", function() {
     ncolor = Renderer.color(tempColor[0], tempColor[1], tempColor[2]);
     
     Scoreboard.getLines().forEach(function(score) {
-        var position = (score.getPoints >= 0) 
+        var position = (score.getPoints() >= 0) 
             ? Scoreboard.getLines().length - score.getPoints() + 1
             : Math.abs(score.getPoints());
 

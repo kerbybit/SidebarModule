@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Sidebar",
+    "settings": [
+      {
+        "type": "toggle",
+        "name": "Toggled",
+        "value": true,
+        "hidden": false
+      },
+      {
+        "type": "toggle",
+        "name": "Show Numbers",
+        "value": false,
+        "hidden": false
+      },
+      {
+        "type": "slider",
+        "name": "Title Scale",
+        "value": 100,
+        "min": 50,
+        "max": 200,
+        "round": 0,
+        "hidden": false
+      },
+      {
+        "type": "slider",
+        "name": "Scores Scale",
+        "value": 100,
+        "min": 50,
+        "max": 200,
+        "round": 0,
+        "hidden": false
+      },
+      {
+        "type": "button",
+        "name": "Move Display",
+        "text": "click",
+        "method": "/Function(function() {\n                sb.gui.open();\n            })/",
+        "hidden": false
+      },
+      {
+        "type": "button",
+        "name": "Reset Settings",
+        "text": "click",
+        "method": "/Function(function() {\n                sbsettings.reset();\n                sbsettings.load();\n            })/",
+        "hidden": false
+      },
+      {
+        "type": "slider",
+        "name": "x",
+        "value": 0.995,
+        "min": 0,
+        "max": 1,
+        "round": 0,
+        "hidden": true
+      },
+      {
+        "type": "slider",
+        "name": "y",
+        "value": 0.4,
+        "min": 0,
+        "max": 1,
+        "round": 0,
+        "hidden": true
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color_picker",
+        "name": "Title Color",
+        "value": [
+          0,
+          0,
+          0
+        ],
+        "hidden": false
+      },
+      {
+        "type": "slider",
+        "name": "Title Alpha",
+        "value": 100,
+        "min": 0,
+        "max": 255,
+        "round": 0,
+        "hidden": false
+      },
+      {
+        "type": "color_picker",
+        "name": "Background Color",
+        "value": [
+          0,
+          0,
+          0
+        ],
+        "hidden": false
+      },
+      {
+        "type": "slider",
+        "name": "Background Alpha",
+        "value": 64,
+        "min": 0,
+        "max": 255,
+        "round": 0,
+        "hidden": false
+      },
+      {
+        "type": "color_picker",
+        "name": "Number Color",
+        "value": [
+          255,
+          255,
+          255
+        ],
+        "hidden": false
+      }
+    ]
+  }
+]

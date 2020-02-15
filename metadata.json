@@ -2,6 +2,6 @@
     "name": "SidebarModule",
     "description": "A better sidebar",
     "requires": ["SettingsManager"],
-    "version": 1.5,
+    "version": 1.6,
     "entry": "index.js"
 }

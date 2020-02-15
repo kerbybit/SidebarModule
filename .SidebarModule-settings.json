@@ -33,17 +33,23 @@
         "hidden": false
       },
       {
+        "type": "toggle",
+        "name": "Murse Mode",
+        "value": true,
+        "hidden": false
+      },
+      {
         "type": "button",
         "name": "Move Display",
         "text": "click",
-        "method": "/Function(function() {\n                sb.gui.open();\n            })/",
+        "method": "/Function(\nfunction () {\n    sb.gui.open();\n}\n)/",
         "hidden": false
       },
       {
         "type": "button",
         "name": "Reset Settings",
         "text": "click",
-        "method": "/Function(function() {\n                sbsettings.reset();\n                sbsettings.load();\n            })/",
+        "method": "/Function(\nfunction () {\n    sbsettings.reset();\n    sbsettings.load();\n}\n)/",
         "hidden": false
       },
       {

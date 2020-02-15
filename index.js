@@ -1,3 +1,5 @@
+import { Setting, SettingsObject } from "SettingsManager/SettingsManager"
+
 var sbsettings = new SettingsObject("SidebarModule", [
     {
         "name": "Sidebar",
@@ -6,6 +8,7 @@ var sbsettings = new SettingsObject("SidebarModule", [
             new Setting.Toggle("Show Numbers", false),
             new Setting.Slider("Title Scale", 100, 50, 200),
             new Setting.Slider("Scores Scale", 100, 50, 200),
+            new Setting.Toggle("Murse Mode", false),
             new Setting.Button("Move Display", "click", function() {
                 sb.gui.open();
             }),
@@ -31,8 +34,8 @@ var sbsettings = new SettingsObject("SidebarModule", [
 Setting.register(sbsettings);
 
 var sb = {
-    display: new Display({background: DisplayHandler.Background.FULL}),
-    numbers: new Display({background: DisplayHandler.Background.FULL}),
+    display: new Display().setBackground(DisplayHandler.Background.FULL),
+    numbers: new Display().setBackground(DisplayHandler.Background.FULL),
     gui: new Gui()
 };
 
@@ -42,7 +45,7 @@ sb.display.setRenderLoc(
 );
 
 sb.gui.registerDraw(function() {
-    Renderer.text("Drag to move sidebar", 0, 0).draw();
+    new Text("Drag to move sidebar", 0, 0).draw();
     if (sb.display.getAlign() == DisplayHandler.Align.RIGHT) {
         Renderer.drawRect(0xffff0000, sb.display.getRenderX() + 5, sb.display.getRenderY() - 5, -75, 1);
         Renderer.drawRect(0xffff0000, sb.display.getRenderX() + 5, sb.display.getRenderY() - 5, 1, 100);
@@ -93,12 +96,9 @@ register("tick", function() {
         sb.numbers.shouldRender = false;
         return;
     }
+    var murseMode = sbsettings.getSetting("Sidebar", "Murse Mode");
 
-    if (sbsettings.getSetting("Sidebar", "Show Numbers")) {
-        sb.numbers.shouldRender = true;
-    } else {
-        sb.numbers.shouldRender = false;
-    }
+    sb.numbers.shouldRender = sbsettings.getSetting("Sidebar", "Show Numbers");
 
     Scoreboard.setShouldRender(false);
     sb.display.shouldRender = true;
@@ -124,56 +124,67 @@ register("tick", function() {
         sb.numbers.setRenderLoc(
             sb.display.getRenderX() + 2,
             sb.display.getRenderY()
-        )
+        );
     } else {
         sb.numbers.setRenderLoc(
             sb.display.getRenderX() + sb.display.getWidth() + 2,
             sb.display.getRenderY()
-        )
+        );
     }
 
     sb.display.clearLines();
     sb.numbers.clearLines();
 
-    var tempColor = sbsettings.getSetting("Colors", "Title Color");
-    var tempAlpha = sbsettings.getSetting("Colors", "Title Alpha");
-    var tempScale = sbsettings.getSetting("Sidebar", "Title Scale");
-    var color = Renderer.color(tempColor[0], tempColor[1], tempColor[2], tempAlpha);
-    sb.display.addLine(
-        new DisplayLine("  " + Scoreboard.getTitle() + "  ")
-        .setAlign("center")
-        .setBackgroundColor(color)
-        .setScale(tempScale / 100)
-    );
-    sb.numbers.addLine(new DisplayLine("").setBackgroundColor(color).setScale(tempScale / 100));
-
-    tempColor = sbsettings.getSetting("Colors", "Background Color");
-    tempAlpha = sbsettings.getSetting("Colors", "Background Alpha");
-    tempScale = sbsettings.getSetting("Sidebar", "Scores Scale");
-    color = Renderer.color(tempColor[0], tempColor[1], tempColor[2], tempAlpha);
-    tempColor = sbsettings.getSetting("Colors", "Number Color");
-    ncolor = Renderer.color(tempColor[0], tempColor[1], tempColor[2]);
+    try {
+        var tempColor = sbsettings.getSetting("Colors", "Title Color");
+        var tempAlpha = sbsettings.getSetting("Colors", "Title Alpha");
+        var tempScale = sbsettings.getSetting("Sidebar", "Title Scale");
+        var color = Renderer.color(tempColor[0], tempColor[1], tempColor[2], tempAlpha);
+        sb.display.addLine(
+            new DisplayLine("  " + Scoreboard.getTitle() + "  ")
+            .setAlign("center")
+            .setBackgroundColor(color)
+            .setScale(tempScale / 100)
+        );
+        sb.numbers.addLine(new DisplayLine("").setBackgroundColor(color).setScale(tempScale / 100));
     
-    Scoreboard.getLines().forEach(function(score) {
-        var position = (score.getPoints >= 0) 
-            ? Scoreboard.getLines().length - score.getPoints() + 1
-            : Math.abs(score.getPoints());
-
-        sb.display.setLine(
-            position,
-            new DisplayLine(score.getName())
-                .setAlign("left")
-                .setBackgroundColor(color)
-                .setScale(tempScale / 100)
-        );
-
-        sb.numbers.setLine(
-            position, 
-            new DisplayLine(score.getPoints())
-                .setAlign("right")
-                .setTextColor(ncolor)
-                .setBackgroundColor(color)
-                .setScale(tempScale / 100)
-        );
-    })
+        tempColor = sbsettings.getSetting("Colors", "Background Color");
+        tempAlpha = sbsettings.getSetting("Colors", "Background Alpha");
+        tempScale = sbsettings.getSetting("Sidebar", "Scores Scale");
+        color = Renderer.color(tempColor[0], tempColor[1], tempColor[2], tempAlpha);
+        tempColor = sbsettings.getSetting("Colors", "Number Color");
+        ncolor = Renderer.color(tempColor[0], tempColor[1], tempColor[2]);
+        
+        Scoreboard.getLines().forEach(function(score) {
+            var position = (score.getPoints() >= 0) 
+                ? Scoreboard.getLines().length - score.getPoints() + 1
+                : Math.abs(score.getPoints());
+            var line = score.getName();
+            if (murseMode) {
+                line = line
+                    .replace("Coins", "Murse")
+                    .replace("Purse", "Murse")
+                    .replace("Piggy", "Miggy");
+            }
+    
+            sb.display.setLine(
+                position,
+                new DisplayLine(line)
+                    .setAlign("left")
+                    .setBackgroundColor(color)
+                    .setScale(tempScale / 100)
+            );
+    
+            sb.numbers.setLine(
+                position, 
+                new DisplayLine(score.getPoints())
+                    .setAlign("right")
+                    .setTextColor(ncolor)
+                    .setBackgroundColor(color)
+                    .setScale(tempScale / 100)
+            );
+        });
+    } catch {
+        return;
+    }
 })

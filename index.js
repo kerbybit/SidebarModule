@@ -186,5 +186,5 @@ register("tick", function() {
                     .setScale(tempScale / 100)
             )
         })
-    } catch {}
+    } catch(e) {}
 })
